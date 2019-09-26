@@ -1,0 +1,37 @@
+<ul class="list-unstyled text-center">
+    {# Boucle pour afficher dans la sidebar les 5 derniers utilisateurs inscrits sur le site dans la side  #}
+    {% for post in posts|slice(0,5) %}
+
+        <article class="mx-3 my-2">
+
+            {# Si je suis authentifié, j'accède au profil de l'utilisateur lorsque je clique sur un utilisateur de la sidebar #}
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <a href="{{ path('advice_post_show', {'slug': post.slug }) }}" class="d-flex flex-row pb-2">
+
+            {# Sinon je suis dirigé vers le formulaire de connexion #}
+            {% else %}
+            <a href="{{ path('app_login') }}" class="d-flex flex-row pb-2">
+
+            {% endif %}
+
+
+                    <div class="d-flex flex-column">
+                        <div class="d-flex justify-content-start">
+                            <h5 class="font-weight-bold mr-3">{{ post.user.username }}</h5>
+
+                        </div>
+                        <p class="d-flex justify-content-start">
+                            <span class="font-italic"> 
+                                {% for job in post.jobs %}
+                                    {{ job.name }} 
+                                {% endfor %}
+                            </span>
+                        </p>
+                    </div>
+
+            </a>
+
+        </article>
+
+    {% endfor %}
+</ul>

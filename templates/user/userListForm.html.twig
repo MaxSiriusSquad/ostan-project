@@ -1,0 +1,12 @@
+
+{{form_start(formSearchUser, {'action': path('user_list'), 'method': 'POST'}) }}
+<div class="form-group custom-control custom-checkbox">
+
+{{form_row(formSearchUser.jobs, { 'attr': {'class': 'Submit me' }}) }}</div>
+<div class="form-group">
+<label for="">Son ou ses tags sont... :</label>
+{{form_widget(formSearchUser.tags)}}
+</div>
+
+
+{{ form_end(formSearchUser) }}

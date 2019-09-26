@@ -1,0 +1,14 @@
+
+
+{{form_start(formSearchPost, {'action': path('backend_adList'), 'method': 'POST'}) }}
+{#<label for="">Filtrer par métier :</label>#}
+<div class="form-group custom-control custom-checkbox">
+
+{#<label for="">Filtrer par utilisateur :</label>#}
+{{form_row(formSearchPost, { 'attr': {'class': 'Submit me' }}) }}</div>
+<div class="form-group">
+{{form_widget(formSearchPost)}}
+</div>
+
+
+{{ form_end(formSearchPost) }}

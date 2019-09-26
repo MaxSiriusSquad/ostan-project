@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register
+{% endblock %}
+
+{% block body %}
+    <h1 class="title-register">Inscription</h1>
+
+    <div class="form-register">
+        <div class="card-body">
+            {{ form_start(registrationForm) }}
+            {{ form_row(registrationForm.avatar) }}
+            {{ form_row(registrationForm.firstname) }}
+            {{ form_row(registrationForm.lastname) }}
+            {{ form_row(registrationForm.username) }}
+            {{ form_row(registrationForm.description) }}
+            <div class="form-group-stan">
+                {{ form_row(registrationForm.birthdate) }}
+                <img class='img-stan' src="{{asset('images/stanpool.png')}}" alt="logo du site">
+                {{ form_row(registrationForm.jobs) }}
+            </div>
+            {{ form_row(registrationForm.siret) }}
+            {{ form_row(registrationForm.companyname) }}
+            {{ form_row(registrationForm.phonenumber) }}
+            {{ form_row(registrationForm.email) }}
+            {{ form_row(registrationForm.jobs) }}
+            {{ form_row(registrationForm.tags) }}
+            <small>CTRL+clic pour séléctionner plusieurs tags (entre 1 et 5 tags)</small>
+            {{ form_row(registrationForm.plainPassword) }}
+            {{ form_row(registrationForm.agreeTerms) }}
+
+
+            <button class="btn btn-warning">Envoyer</button>
+            {{ form_end(registrationForm) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            // Je séléctionne le champ jobs du form par son ID
+            // Je récupère ses enfants avec children (les divs qui contiennent label et input par job)
+            // Je boucle sur chacun d'entre eux (index cest le numéro de l'enfant dans le tableau (1ere div, 2eme div...) et element c'est la div en question)
+            $("#registration_form_jobs").children().each(function (index, element) {
+                //dans l'element, donc la div que je parcours, je cherche un label et je récupère son texte 
+                const label = $(element).find("label").text();
+                //Normalize est là pour remplacer les caractères spéciaux si y'en a
+                const labelNormalized = label.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+                // console.log(labelNormalized);
+                //Si le texte du label est EDITEUR alors je cherche dans l'element (la div) un input, et lorsque l'input "change" (coché/décoché) j'appelle 
+                //une fonction toggleEditorField.
+               
+                if (labelNormalized === "EDITEUR") {
+                    $(element).find("input").on('change', function (event) {
+                         //event.target.checked c'est la veuleur de la checkbox (booléenne = true ou false) qui sera envoyé dans la fonction
+                        _toggleEditorFields(event.target.checked);
+                    });
+                }
+            });
+
+            //On appel à la main la fonction avec la valeur false en dur pour cacher les inputs par défaut au chargement
+            _toggleEditorFields(false);
+        });
+
+
+        // C'est la fonction qui est appelé quand le user coche ou décoche editeur. (isEditor est = true ou false)
+        function _toggleEditorFields(isEditor) {
+            //Les deux champs que l'on souhaite ajouter quand on coche editeur
+            const siretField = document.getElementById("registration_form_siret");
+            const companyField = document.getElementById("registration_form_companyname");
+
+            //(isEditor est sois true, sois false (c'est le event.target.checked plus haut))
+            if (isEditor) {
+                //Si isEditor est true alors on affiche les deux inputs et on les mets en required
+                siretField.style.display = "block";
+                siretField.required = true;
+
+                companyField.style.display = "block";
+                companyField.required = true;
+            } else {
+                //Si isEditor est false alors on n'affiche pas les deux inputs et on les mets en non required et on les vide
+                siretField.style.display = "none";
+                siretField.value = "";
+                siretField.required = false;
+
+                companyField.style.display = "none";
+                companyField.value = "";
+                companyField.required = false;
+            }
+        }
+
+
+    </script>
+{% endblock %}

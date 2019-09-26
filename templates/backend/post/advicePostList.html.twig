@@ -1,0 +1,56 @@
+{% extends 'base_backend.html.twig' %}
+
+{% block title %}
+    Administration
+{% endblock %}
+
+{% block content %}
+
+<h1 class ="text-center font-weight-bold">Les articles conseil</h1>
+
+<div class="d-flex justify-content-center">
+    <a href="{{path ('backend_advicePostNew')}}" class="btn btn-success text-uppercase mt-3" role="button"><i class="fas fa-plus"></i> Ajouter un article</a>
+</div>
+
+<div class="body_articles">
+
+    <div class="content content_backend">
+
+    <style>
+        .content {
+            margin: 1em auto;
+            width: 80%;
+
+        }
+    </style>
+   
+        {% for post in listPost %}
+
+        <article class="mb-3 p-3 border border-dark">
+         
+                <h3 class="font-weight-bold">{{post.title}}</h3>
+            
+                <p>{{post.description|truncate(300, true)|raw}}</p>
+
+                <div class="d-flex justify-content-end">
+                    <a class="btn btn-primary" href="{{ path ('advice_post_show', {'slug': post.slug}) }} ">Voir l'article</a>
+                    {#<a href="{{path ('backend_advicePostEdit', {'id': advicePost.id})}}">Voir</a>#}
+                    <a class="btn btn-warning" href="{{path ('backend_advicePostEdit', {'slug': post.slug})}}">Modifier l'article</a>
+
+                    {# pour avoir la fonction supprimer, ne pas mettre de bouton mais directement l'include de la fonction delete #}
+                    {{include('backend/post/_delete.html.twig')}}
+                </div>
+        </article>
+
+        {% endfor %}
+
+        <div class="d-flex justify-content-center">
+            {{ knp_pagination_render(listPost) }}
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,32 @@
+{# Boucle pour afficher dans la sidebar les 5 dernières annonces postées sur le site #}
+{% for adPost in adPosts|slice(0,5) %}
+    {% if adPost.type == "Annonce" and adPost.status.code == "UNBLOCKED" %}
+
+
+        <div class="card-sidebar">
+
+            <div
+                class="card">
+
+                {# Si je suis authentifié, j'accède au détail de l'annonce lorsque je clique sur une annonce de la sidebar #}
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <a
+                        href="{{ path('ad_post_show', {'slug': adPost.slug }) }}" class="card-body px-2 pt-3 pb-0">
+
+                        {# Sinon je suis dirigé vers le formulaire de connexion #}
+                    {% else %}
+                        <a href="{{ path('app_login') }}" class="card-body px-2 pt-3 pb-0">
+
+                        {% endif %}
+
+                        <h6 class="card-title font-weight-bold">{{ adPost.title|truncate(30, true) }}</h6>
+                        <p class="font-italic">Publié le
+                            {{ adPost.createdAt | date('d/m/Y à H:i') }}
+                        </p>
+                    </a>
+
+                </div>
+
+            </div>
+        {% endif %}
+    {% endfor %}

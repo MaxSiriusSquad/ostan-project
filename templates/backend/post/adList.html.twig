@@ -1,0 +1,115 @@
+{% extends 'base_backend.html.twig' %}
+
+{% block title %}
+    Administration
+{% endblock %}
+
+{% block content %}
+
+<style>
+.body_backend{
+    display:flex;
+}
+    .content {
+        margin: 1em auto;
+        width: 80%;
+    }
+</style>
+<div class="body_articles">
+    <div class="content content_backend">
+        <h1 class="text-center font-weight-bold">Les annonces</h1>
+        {% for post in adListPost %}
+            {% if post.status.code == "UNBLOCKED" %}
+                <article class="mb-3 p-3 border border-dark">
+                    <h3 class="font-weight-bold">
+                        {{post.title}}
+                    </h3>
+
+                    <p>
+                        {{post.description|raw}}
+                    </p>
+
+                    <p class="d-flex justify-content-end mr-2 font-italic">
+                        <span>
+                            par
+                            {{post.user.username}}
+                            le
+                            {{ post.createdAt | date('d/m/Y à H:i') }}
+                        </span>
+                    </p>
+
+                    <div class="d-flex justify-content-end">
+                        <a class="btn btn-primary" href="{{ path ('ad_post_show', {'slug': post.slug}) }} ">Voir l'annonce</a>
+                        {# Pour les paramètres de onclick, si le status du post est == a BLOCKED alors le param = UNBLOCKED #}
+                        <button
+                        {# attention, ne pas mettre le slug, laisser le id pour les fonctions ajax #}
+                            type="button" class="btn btn-warning" onclick="handleStatusButton(this,{{post.id}},{{post.status.code == 'BLOCKED' ? " 'UNBLOCKED' " : " 'BLOCKED' "}})">
+                            {# Si le code du status du post est == a BLOCKED alors on ecrit Débloquer dans le bouton #}
+                            <i class="fas fa-minus-circle"></i> {{post.status.code == "BLOCKED" ? "Débloquer l'annonce" : "Bloquer l'annonce"}}
+                        </button>
+                        {{include('backend/post/_delete_ad.html.twig')}}
+                    </div>
+
+                </article>
+
+            {% endif %}
+
+        {% endfor %}
+
+
+        <div class="d-flex justify-content-center">
+            {{ knp_pagination_render(adListPost) }}
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+    {% block search %}
+
+        <div class="ml-3 mt-3 col-2">
+        
+                <h5 class="font-weight-bold text-center">Rechercher les annonces par job et utilisateur</h5>
+                {{ render(controller('App\\Controller\\Backend\\PostController::postSearchForm'
+                )) }}     
+        </div>
+    </div>
+
+    {% endblock %}
+
+
+{% block javascripts %}
+    <script>
+        // On récupère l'url de base du server grâce à window.location
+        var baseUrl = window.location.origin;
+        // Element = Element html du select que l'on a grâce au 'this' dans le onchange du select.
+        // PostId = l'id de l'user envoyé en 2ème paramètre grâce à Twig
+        function handleStatusButton(elementButton, postId, statusCode) { // console.log(postSlug);
+            console.log(window.location)
+            console.log(baseUrl);
+            console.log(elementButton);
+            // On utilise ajax pour faire une requête http en mode "rest" donc sans render
+            $.ajax({
+                method: "PATCH",
+                url: baseUrl + "/backend/" + postId + "/status/" + statusCode,
+                // En cas de succès on affiche un toast confirmant le changement de rôle du user.
+                success: function (result) {
+                    toastr.success('Statut mis à jour');
+                    elementButton.textContent = statusCode == "BLOCKED" ? "Débloquer l'annonce" : "Bloquer l'annonce";
+                    elementButton.onclick = function () {
+                        return handleStatusButton(elementButton, postId, statusCode == "BLOCKED" ? "UNBLOCKED" : "BLOCKED")
+                    };
+                },
+                error: function () {
+                    toastr.error('Impossible de mettre à jour le statut.')
+
+                }
+            });
+        }
+    </script>
+{% endblock %}
+
+

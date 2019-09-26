@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une annonce
+{% endblock %}
+
+{% block content %}
+    <style>
+        .content {
+            margin: 1em auto;
+            width: 55%;
+
+        }
+    </style>
+    <h1 class="text-center font-weight-bold mb-5">Ajout d'une annonce</h1>
+
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+
+        {# <div class="example-wrapper">
+            <h1>Hello {{ controller_name }}! ✅</h1>
+            This friendly message is coming from:
+            <ul>
+                <li>Your controller at <code><a href="{{ '/var/www/html/Apotheose/oStan/oStan/src/Controller/AdController.php'|file_link(0) }}">src/Controller/AdController.php</a></code></li>
+                <li>Your template at <code><a href="{{ '/var/www/html/Apotheose/oStan/oStan/templates/ad/index.html.twig'|file_link(0) }}">templates/ad/index.html.twig</a></code></li>
+            </ul>
+        </div> #}
+
+        {{ form_start(form, {'attr':{'class':'form_add'}}) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-primary btn-send">Envoyer</button>
+        {{ form_end(form) }}
+
+        <a class="text-dark mt-4" href="{{ path('ad_post')}}">Revenir à la liste des annonces</a>
+    {% endif %}
+    
+    {% endblock %}

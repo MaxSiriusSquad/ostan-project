@@ -1,0 +1,66 @@
+App\Entity\Tag:
+  tag{1..10}:
+    name: "<word()>"
+    slug: "<word()>"
+
+App\Entity\User:
+  user{1..40}:
+    username: "<userName()>"
+    firstname: "<firstName()>"
+    lastname: "<lastName()>"
+    email: "<safeEmail()>"
+    password: "<password()>"
+    birthdate: "<date_create()>"
+    companyname: "<company()>"
+    role: "@role2*"
+    address: "<address()>"
+    description: <realText(200)>
+    phonenumber: <randomNumber()>
+    status: "@status*"
+    tags: "2x @tag*"
+    jobs: "2x @job*"
+    slug: "<word()>"
+
+App\Entity\Role:
+  role1:
+    name: "ADMIN"
+    code: "ROLE_USER_ADMIN"
+  role2:
+    name: "USER"
+    code: "ROLE_USER_USER"
+
+
+App\Entity\Post:
+  post{1..35}:
+    title: "<sentence()>"
+    description: <realText(500)>
+    user: "@user*"
+    tags: "3x @tag*"
+    status: "@status2*"
+    type: "<typePost()>"
+    slug: "<word()>"
+
+App\Entity\Comment:
+  comment{1..45}:
+    description: "<realText()>"
+    status: "@status2*"
+    post: "@post*"
+    user: "@user*"
+
+App\Entity\Status:
+  status1:
+    label: "Bloqué"
+    code: "BLOCKED"
+  status2: 
+    label: "Débloqué"
+    code: "UNBLOCKED"
+
+
+App\Entity\Job:
+  job1:
+    name: "Illustrateur"
+  job2:
+    name: "Auteur"
+  job3:
+    name: "Editeur"
+

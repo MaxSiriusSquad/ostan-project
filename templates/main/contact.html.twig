@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formulaire de contact{% endblock %}
+
+{% block content %}
+<style>
+    </style>
+
+<div class="contact-form border text-center py-2 mx-5 mb-5 pt-3 w-50 mx-auto">
+    <h1 class="contact-form-title py-2 mx-5 text-center">Formulaire de contact</h1>
+    {# je n'arrive pas à renvoyer ce titre dans un encadré en superposition de l'encadré du formulaire #}
+                <img class='img-stan mx-auto' src="{{asset('images/luckystan.png')}}" alt="logo du site">
+
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+        {{ form_end(form) }}
+            <a href="{{path ('advice_post')}}">Retour à l'accueil</a>
+
+</div>
+{% endblock %}
+

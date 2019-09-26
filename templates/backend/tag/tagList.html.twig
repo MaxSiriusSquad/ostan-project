@@ -1,0 +1,53 @@
+{% extends 'base_backend.html.twig' %}
+
+{% block title %}
+    Administration
+{% endblock %}
+
+{% block content %}
+
+<h1 class="text-center font-weight-bold">Les tags</h1>
+
+<div class="d-flex justify-content-center">
+    <a href="{{path ('backend_tag_new')}}" class="btn btn-success text-uppercase font-weight-bold mt-3" role="button"><i class="fas fa-plus"></i> Ajouter un tag</a>
+</div>
+
+<div class="content content_backend">
+
+    <style>
+    .content {
+        margin: 1em auto;
+        width: 80%;
+    }
+    </style>
+
+    <table class="table table-striped w-60 mx-auto">
+        <thead class="text-uppercase">
+            <tr>
+                <th scope="col">#Id</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Action</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for tag in tags %}
+                <tr>
+                    <th scope="row">{{tag.id}}</th>
+                    <td class="text-uppercase">{{tag.name}}</td>
+                    <td>
+                        <a class="btn btn-warning" href="{{path ('backend_tag_edit', {'slug': tag.slug})}}">Modifier le tag</a>
+                        {# Mettre un include et non pas un <a> car le <a> envoie en GET car il n'y a pas de submit #}
+                        {{ include('backend/tag/_delete.html.twig') }}
+                    </td>
+                </tr>
+            {% endfor %}
+
+
+        </tbody>
+    </table>
+</div>
+
+    
+
+{% endblock %}

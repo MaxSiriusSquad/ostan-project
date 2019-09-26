@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ advicePost.title }}{% endblock %}
+
+{% block content %}
+
+
+<section class="section-post">
+
+    <article class="animated slideInUp">
+
+        <div class="title-card border border-dark text-center py-2">
+            <h5>{{ advicePost.title }}</h5>
+        </div>
+
+        
+            <div class="advicePost-content">
+                <p>
+                        {# truncate permet de réduire la taille du contenu du contenu de l'article et ajouter "..." après #}
+                        {{ advicePost.description|raw }}
+                </p>
+            </div>
+        
+
+        <div class ="my-5 d-flex flex-wrap justify-content-around">
+            {# Exemple emplacement des images #}
+
+            {# Picture 1 #}
+            <div class="container1">
+            <img class="img-advicepost" src="{{ asset(picture_upload_path ~ (advicePost.picture1 ?: 'marvel.jpg')) }}" class="img-fluid image-galerie modal-hover-opacity" style="max-width:100%;cursor:pointer" onclick="onClick(this)" alt="">
+            </div>
+
+            {# Picture 2 #}
+            <div class="container1">
+            <img class="img-advicepost" src="{{ asset(picture_upload_path ~ (advicePost.picture2 ?: 'marvel.jpg')) }}" class="img-fluid image-galerie modal-hover-opacity" style="max-width:100%;cursor:pointer" onclick="onClick(this)" alt="">
+            </div>
+
+            {# Picture 3 #}
+            <div class="container1">
+            <img class="img-advicepost" src="{{ asset(picture_upload_path ~ (advicePost.picture3 ?: 'marvel.jpg')) }}" class="img-fluid image-galerie modal-hover-opacity" style="max-width:100%;cursor:pointer" onclick="onClick(this)" alt="">
+            </div> 
+        </div>
+        <div id="modal01" class="modal" onclick="this.style.display='none'">
+            <span class="close">&times;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <div class="modal-cont">
+                <img id="img01" style="max-width:100%">
+            </div>
+        </div>
+        
+        <div class="metadata mr-3 mb-3 font-italic text-muted d-flex justify-content-end">
+            <span>Publié le {{ advicePost.createdAt | date('d/m/Y à H:i') }}</span>
+        </div>
+
+    </article>
+</section>
+
+    <a class="text-dark text-center" href="{{ path('advice_post')}}">Revenir à l'accueil</a>
+
+
+{% endblock %}
+{% block javascripts %}
+<script>
+        function onClick(element) {
+            document.getElementById("img01").src = element.src;
+            document.getElementById("modal01").style.display = "block";
+        }
+</script>
+{% endblock %}

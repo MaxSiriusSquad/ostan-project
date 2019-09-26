@@ -1,0 +1,140 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des annonces
+{% endblock %}
+
+{% block content %}
+    <style>
+        .content {
+            margin: 1em auto;
+            width: 55%;
+
+        }
+    </style>
+    <section class="section-post">
+
+        {# Boucle pour afficher la liste des ANNONCES qui sont en BDD #}
+        {% for post in listPosts %}
+            {# Si le type des posts est annonce ET si son status est UNBLOCKED, alors tu les affiches. #}
+            {% if post.type == "Annonce" and post.status.code == "UNBLOCKED" %}
+
+                <article class="animated slideInUp adCard">
+
+                    <div class="d-flex justify-content-start adTags">
+                        {% for tag in post.tags %}
+                            <a href="{{ path('tag_show', {'slug': tag.slug }) }}" class="badge badge-pill badge-light amber lighten-2 mr-1">{{ tag.name }}</a>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-flex p-4 align-items-center">
+
+                        <div class="imgWrapper mr-4">
+                            <img src="{{ asset(picture_upload_path ~ (post.picture1 ?: 'marvel.jpg')) }}" onclick="onClick(this)"><h2 class="title-card">{{post.title}}</h2>
+                        </div>
+                        <div>
+                            <div>
+                                <p>{{ post.description|striptags|truncate(300, true)|raw }}</p>
+                            </div>
+                            <div class="date_post">
+
+                                <span class="font-italic text-muted" style="font-size: .8em;">
+                                    Publié le
+                                    {{ post.createdAt | date('d/m/Y à H:i') }}
+                                    par
+                                    <a class="text-dark font-weight-bold" href="{{path('user_show', {'slug': post.user.slug }) }}">{{ post.user }}</a>
+                                </span>
+                            </div>
+                            <div style="text-align: end;">
+                                <a href="{{ path('ad_post_show', {'slug': post.slug }) }}" class="btn btn-sm btn-light">
+                                    Lire la suite
+                                </a>
+                                {# Pour les paramètres de onclick, si le status du post est == a BLOCKED alors le param = UNBLOCKED #}
+                                {% if is_granted('ROLE_USER_ADMIN') %}
+                                    <button
+                                        type="button" class="btn btn-sm btn-warning" onclick="handleStatusButton(this,{{post.id}},{{post.status.code == 'BLOCKED' ? " 'UNBLOCKED' " : " 'BLOCKED' "}})">
+                                        {# Si le code du status du post est == a BLOCKED alors on ecrit Débloquer dans le bouton #}
+                                        <i class="fas fa-minus-circle"></i>
+                                        {{post.status.code == "BLOCKED" ? "Débloquer" : "Bloquer"}}
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            {% endif %}
+        {% endfor %}
+        <div class="d-flex justify-content-center">
+            {{ knp_pagination_render(listPosts) }}
+        </div>
+
+    </section>
+
+{% endblock %}
+
+{% block search %}
+
+    <div class="sidebar-search col-2">
+
+        <div class="d-flex justify-content-center">
+            <a href="{{ path('ad_post_new') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                Ajouter une annonce
+            </a>
+        </div>
+
+        <h5 class="font-weight-bold text-center">Rechercher un membre de la communauté par métiers et par tags</h5>
+
+        {{ render(controller(
+        'App\\Controller\\UserController::userSearchForm'
+    )) }}
+        <div class="border-top border-dark p-3">
+
+            <h5 class="font-weight-bold text-center mb-4">Tags</h5>
+            {% for tag in tags %}
+                <a href="{{ path('tag_show', {'slug': tag.slug }) }}" class="badge badge-pill badge-light amber lighten-2 mr-1">
+                    {{ tag.name }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        // On récupère l'url de base du server grâce à window.location
+        var baseUrl = window.location.origin;
+        // Element = Element html du select que l'on a grâce au 'this' dans le onchange du select.
+        // PostId = l'id de l'user envoyé en 2ème paramètre grâce à Twig
+        function handleStatusButton(elementButton, postId, statusCode) {
+            // console.log(postId);
+            // console.log(window.location)
+            console.log(baseUrl);
+            // console.log(elementButton);
+            // On utilise ajax pour faire une requête http en mode "rest" donc sans render
+            $.ajax({
+                method: "PATCH",
+                url: baseUrl + "/backend/" + postId + "/status/" + statusCode,
+                // En cas de succès on affiche un toast confirmant le changement de rôle du user.
+                success: function (result) {
+                    console.log(toastr);
+                    toastr.success('Statut mis à jour');
+                    elementButton.textContent = statusCode == "BLOCKED" ? "Débloquer" : "Bloquer";
+                    elementButton.onclick = function () {
+                        return handleStatusButton(elementButton, postId, statusCode == "BLOCKED" ? "UNBLOCKED" : "BLOCKED")
+                    };
+                },
+                error: function () {
+                    toastr.error('Impossible de mettre à jour le statut.')
+
+                }
+            });
+        }
+    </script>
+    <script>
+        function onClick(element) {
+            document.getElementById("img01").src = element.src;
+            document.getElementById("modal01").style.display = "block";
+        }
+    </script>
+
+
+{% endblock %}

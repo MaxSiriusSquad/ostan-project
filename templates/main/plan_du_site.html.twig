@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Plan du site{% endblock %}
+
+{% block content %}
+
+<div id="plan_du_site" class="center-column col-xs-12 col-sm-12 flex"</div>
+
+    <div id="center_column" class="row flex justify-content-center">
+        
+        <h1 class="page-heading"> Plan du site</h1>
+    </div>
+
+    <div id="sitemap" class="row center-column d-flex align-items-center">
+
+        <h3 class="page-subheading "> Votre compte</h3>
+            <ul class="tree">
+                <li> <a href="{{path ('app_login') }}" title="Identifiez-vous">_ Identifiez-vous </a></li>
+                <li> <a href="{{path ('app_register') }}" title="Créer un nouveau compte">_ Créer un nouveau compte </a></li>
+            </ul>
+    </div>
+    
+
+    <div id="sitemap" class="row center-column d-flex align-items-center">
+        <h3 class="page-subheading">Page d'accueil </h3>
+            <ul class="tree">
+
+                <li><a href="{{path ('advice_post') }}">_ Nos articles conseils</li>
+
+                {# lien différent selon qu'il soit ou non enregistré #}
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+
+                    <li><a href="{{path ('user_list') }}">_ Des talents à découvrir</a></li>
+                    <li><a href="{{path ('user_list') }}">_ Des éditeurs investis</a></li>
+
+                {% else %}
+
+                    <li><a href="{{ path ('app_login') }}">_ Des talents à découvrir</a></li>
+                    <li><a href="{{ path ('app_login') }}">_ Des éditeurs investis</a></li>
+
+                {% endif %}
+
+                <li><a href="{{path ('contact') }}">_ Nous contacter</a></li>
+                <li><a href="{{path ('mentions_legales') }}">_ Mentions légales</a></li>
+                
+            </ul>
+
+    </div>
+
+
+    <div id="sitemap" class="row center-column d-flex align-items-center">
+        <h3 class="page-subheading">Accès utilisateur </h3>
+             <ul class="tree">
+
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+
+                    <li><a href="{{path ('user_show', {'slug': app.user.slug }) }}">_ Mon profil</a></li>
+                    <li><a href="{{path ('ad_post') }}">_ Liste des annonces</a></li>
+                    <li><a href="{{path ('user_list') }}">_ Liste des utilisateurs</a></li>
+                        <ul>
+                            <li><a href="{{path ('user_list') }}">_ Scénaristes</a></li>
+                            <li><a href="{{path ('user_list') }}">_ Illustrateurs</a></li>
+                            <li><a href="{{path ('user_list') }}">_ Editeurs</a></li>
+                        </ul>
+                    <li><a href="{{path ('newmessage') }}">_ Envoyer un message privé</a></li>
+
+                {% else %}
+
+                    <li><a href="{{path ('app_login') }}">_ Mon profil</a></li>
+                    <li><a href="{{path ('app_login') }}">_ Liste des annonces</a></li>
+                    <li><a href="{{path ('app_login') }}">_ Liste des utilisateurs</a></li>
+                        <ul>
+                            <li><a href="{{path ('app_login') }}">_ Scénaristes</a></li>
+                            <li><a href="{{path ('app_login') }}">_ Illustrateurs</a></li>
+                            <li><a href="{{path ('app_login') }}">_ Editeurs</a></li>
+                        </ul>
+                    <li><a href="{{path ('app_login') }}">_ Envoyer un message privé</a></li>
+
+                {% endif %}
+
+
+            </ul>
+
+   </div>
+
+</div>
+
+
+  
+
+{% endblock %}

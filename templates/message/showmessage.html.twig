@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Messagerie
+{% endblock %}
+
+{% block content %}
+    <style>
+        .content {
+            margin: 1em auto;
+            width: 60%;
+
+        }
+    </style>
+
+    <div class="message-detail">
+        <h1 class="message-title">{{message.title}}</h1>
+        <div class="messages">
+            {% for message in messages %}
+
+                {% if message.user == app.user %}
+
+                    <div class="bubble-send tri-right round btm-right-send">
+                        <div class="talktest">
+                            <p class="message-content">{{message.content}}</p>
+                            <div class="message-author">envoyé le
+                                {{message.createdAt|date('d/m/Y à G:i')}}</div>
+                        </div>
+                    </div>
+                {% elseif message.userReceiver == app.user %}
+
+                    <div class="bubble-response tri-right round btm-left-response">
+                        <div class="talktest">
+                            <p class="message-content">{{message.content}}</p>
+                            <div class="message-author-response">écrit par
+                                {{message.user}}, le
+                                {{message.createdAt|date('d/m/Y G:i')}}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="message-option">
+            {{ include('message/_form.html.twig', {'button_label': 'Envoyer'}) }}
+            <a class="btn btn-primary" href="{{path('message') }}">Retour à la messagerie</a>
+
+        </div>
+    </div>
+
+{% endblock %}

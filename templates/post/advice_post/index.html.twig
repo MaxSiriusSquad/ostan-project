@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bienvenue sur O'Stan !
+{% endblock %}
+
+{% block content %}
+    <style>
+        .postGrid {
+            display: grid;
+            grid-gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        }
+        .imgWrapper {
+            width: 100%;
+            max-width: 100% !important;
+            height: 150px;
+            overflow: hidden;
+        }
+        .imgWrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    </style>
+    <section class="section-post">
+
+        <h1 class="text-center">Découvrez nos derniers articles !</h1>
+
+        <div class="postGrid">
+            {# Boucle pour afficher la liste des articles de conseils qui sont en BDD #}
+            {% for advice_post in advicelistPosts %}
+                {# Le if vérifie qu'il s'agit bien d'article à afficher uniquement #}
+                {% if advice_post.type == "Article" %}
+
+                    <div class="card">
+                        <!-- Card image -->
+                        <div class="imgWrapper">
+                            <img class="card-img-top" src="{{ asset(picture_upload_path ~ (advice_post.picture1 ?: 'marvel.jpg')) }}" alt="Card image cap">
+                        </div>
+
+                        <!-- Card content -->
+                        <div class="card-body">
+
+                            <!-- Title -->
+                            <h4 class="card-title">
+                                <a href="{{ path('advice_post_show', {'slug': advice_post.slug }) }}">{{ advice_post.title }}</a>
+                            </h4>    
+                             <!-- Text -->
+                            <p class="card-text">{{ advice_post.description|striptags|truncate(300, true)|raw }}</p>                        
+                            <!-- Button -->
+                            <a href="{{ path('advice_post_show', {'slug': advice_post.slug }) }}" class="btn btn-primary">Lire l'article</a>
+                        </div>
+
+                        <div class="card-footer text-muted text-center">
+                            Publié le
+                            {{ advice_post.createdAt | date('d/m/Y à H:i') }}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="d-flex justify-content-center">
+            {{ knp_pagination_render(advicelistPosts) }}
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}{% endblock %}

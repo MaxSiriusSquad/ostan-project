@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Messagerie
+{% endblock %}
+
+{% block content %}
+   <style>
+        .content {
+            margin: 1em auto;
+            width: 100%;
+
+        }
+    </style>
+
+    <div class="message-user">
+        <h1 class="message-title">Messagerie personnelle</h1>
+        <div>
+            <div class="msg">
+
+
+                {% for message in messages %}
+
+                    {% if message.user == app.user %}
+                        <div class="talk-bubble tri-right round btm-right">
+                            <div class="message-content">
+                                <a href="{{ path ('showmessage', {'title': message.title }) }}">
+                                    <div>
+
+                                        
+                                        <p class="title-message">{{message.title}}</p>
+                                        
+                                        <p class="content-message">{{message.content|truncate(100, true)}}</p>
+                                        
+
+
+                                    </div>
+                                </a>
+                                <p class="message-author">Message envoyé le
+                                    {{message.createdAt|date}}
+                                    à
+                                    {{message.userReceiver}}
+                                </p>
+                            </div>
+                        </div>
+                    {% elseif message.userReceiver == app.user %}
+
+                        <div class="talk-bubble tri-right round btm-left">
+                            <div class="message-content">
+                                <a href="{{ path ('showmessage', {'title': message.title })}}">
+                                    <div>
+                                        <p class="title-message">{{message.title}}</p>
+                                        <p class="content-message">{{message.content|truncate(100, true)}}</p>
+                                    </div>
+                                </a>
+                                <p class="message-author">Message envoyé par
+                                    {{message.user}}
+                                    le
+                                    {{message.createdAt|date}}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="button_msg">
+
+                <a class="btn btn-primary" href="{{path ('newmessage') }} ">
+                    <i class="far fa-envelope"></i>
+                    Nouveau message</a>
+                <a class="btn btn-primary btn-msg-back" href="{{path('ad_post') }}">Retour à la page d'accueil</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

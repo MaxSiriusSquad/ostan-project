@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajout d'un article conseil{% endblock %}
+
+{% block content %}
+
+<style>
+    .content {
+        margin: 1em auto;
+        width: 55%;
+
+    }
+</style>
+
+<section class="section-post">
+
+    <h1 class="text-center font-weight-bold mb-5">Ajout d'un article conseil</h1>
+
+    {{ include('backend/post/_form.html.twig', {'button_label': 'Publier cet article'}) }}
+
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('backend_advicePostList') }}" class="btn btn-primary">Retour à la liste</a>
+    </div>
+
+
+</section>
+
+
+{% endblock %}

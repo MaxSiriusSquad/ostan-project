@@ -1,0 +1,177 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Le concept O'Stan !
+{% endblock %}
+
+{% block content %}
+    <style>
+        .content {
+            margin: 1em 10em;
+            width: 55%;
+
+        }
+    </style>
+
+    <h1 class="text-center font-weight-bold title-concept">
+        Le concept O'Stan !</h1>
+    <img class='img-stan mx-auto' src="{{asset('images/stanlix.png')}}" alt="logo du site">
+
+    <section class="text-center">
+
+
+        <section class="concept-presentation">
+            <div>
+
+                <div class="text-center">
+                    <p>
+                        Vous êtes
+                        <span class="font-weight-bold">illustrateur</span>
+                        de bandes dessinées, amateur ou professionnel, et vous souhaitez participer à de nouveaux projets ?
+                    </p>
+                    <p>
+                        Vous êtes
+                        <span class="font-weight-bold">auteur</span>
+                        de bandes dessinées ou d'histoires (de romans, de nouvelles ou autre), amateur ou professionnel, et vous souhaitez adapter celles-ci en bandes dessinées ou romans graphiques ?
+                    </p>
+                    <p>
+                        Vous êtes une
+                        <span class="font-weight-bold">maison d'édition</span>
+                        ? Vous souhaitez découvrir et donner la chance à de nouveaux talents et de nouveaux projets ?
+                    </p>
+                    <p>
+                        Si vous vous reconnaissez, ce site est fait pour vous !
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <article>
+
+            <h3 class="text-center font-weight-bold py-3 title-concept">O'Stan ? C'est quoi ?</h3>
+
+            <p>
+                Le concept du site O'Stan est simple et aussi novateur dans le milieu de la bande dessinée :
+            </p>
+            <p class="text-uppercase font-weight-bold">
+                Faciliter la mise en relation de passionnés du "neuvième art" qu'ils soient illustrateurs, auteurs ou maisons d'édition !
+            </p>
+
+            <p>
+                Ce site a pour but premier de voir émerger de
+                <span class="font-weight-bold">nouveaux projets</span>, de
+                <span class="font-weight-bold">nouvelles collaborations</span>
+                et de
+                <span class="font-weight-bold">nouveaux talents</span>
+                autour de la bande dessinées !
+            </p>
+
+        </article>
+
+    </section>
+
+    <article>
+
+        <h3 class="text-center font-weight-bold title-concept pt-2">Ce site a été conçu par 4 développeurs web en herbe.
+        </h3>
+        <h6 class="text-center title-concept-sub">
+            Il se murmure même qu'il s'agit des meilleurs de leur génération !<img class="pizza-emeric" src="{{ asset('images/pizza.png') }}" alt="La pizza d'Emeric"></h6>
+        <h4 class="text-center font-weight-bold py-3 title-concept">Les voici :</h4>
+
+
+        <div class="dev-presentation">
+
+            <div class="d-flex justify-content-center">
+                <img src="{{ asset('images/lucie.png') }}" class="profil-avatar-3 rounded-circle">
+            </div>
+
+            <div class="text-center">
+
+                <h4 class="font-weight-bold mt-3">
+                    Lucie
+                </h4>
+
+                <p class="px-5">
+                    J'ai 22 ans, j'habite en Bretagne et j'ai rejoint O'Clock pour devenir Développeuse Web ! J'avais déjà pratiqué un peu de code au lycée et j'ai eu envie de continuer dans cette lancée ! J'adore les comics de chez DC Comics, les mangas également et mon super-vilain préféré est le Joker (le meilleur non ?). Je suis très contente de pouvoir dire que je suis enfin développeuse web junior, spécialisée en Symfony.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="dev-presentation">
+
+            <div class="d-flex justify-content-center">
+                <img src="{{ asset('images/karine.png') }}" class="profil-avatar-3 rounded-circle">
+            </div>
+
+            <div class="text-center">
+
+                <h4 class="font-weight-bold mt-3">
+                    Karine
+                </h4>
+
+                <p class="px-5">
+                    A 32 ans et après 12 ans dans la banque, j'ai décidé de changer de vie professionnelle. Je n'avais jamais osé me lancer dans le code avant, même si cela m'avait toujours attiré.
+                    Grâce à O'Clock, cette reconversion a pu prendre forme.
+                    Après une formation intensive de 5 mois, je peux désormais dire que je suis Développeuse web Junior, avec une spécialisation Symfony.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="dev-presentation">
+
+            <div class="d-flex justify-content-center">
+                <img src="{{ asset('images/emeric.png') }}" class="profil-avatar-3 rounded-circle">
+            </div>
+
+            <div class="text-center">
+
+                <h4 class="font-weight-bold mt-3">
+                    Emeric
+                </h4>
+
+                <p class="px-5">
+                    J'ai 28 ans et je suis passionné de manga. Avant de faire la formation chez O'Clock et de devenir Développeur web junior j'étais plombier mais j'avais déjà quelques connaissances en html et css.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="dev-presentation">
+
+            <div class="d-flex justify-content-center">
+                <img src="{{ asset('images/max.png') }}" class="profil-avatar-3 rounded-circle">
+            </div>
+
+            <div class="text-center">
+
+                <h4 class="font-weight-bold mt-3">
+                    Maxime
+                </h4>
+
+                <p class="px-5">
+                    Passionné de comics de 32 ans, je suis dessinateurs à mes heures perdues ! Dessiner me permet de me détendre et d'observer davantage le monde qui m'entoure ! C'est comme un exutoire pour moi ! Je suis également passionné de cinéma, d'automobile et de l'Italie ! Après une reconversion professionnelle effectuée grâce à O'Clock, je suis désormais Développeur web junior !
+                </p>
+
+            </div>
+
+        </div>
+
+
+    </article>
+
+
+    <p class="text-center">Des suggestions ? Des questions ?
+        <a href="{{path('contact')}}">N'hésitez surtout pas à nous contacter !</a>
+    </p>
+
+    <a class="text-dark text-center" href="{{ path('advice_post')}}">Revenir à l'accueil</a>
+
+
+{% endblock %}

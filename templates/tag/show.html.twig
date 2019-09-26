@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ tag.name }}{% endblock %}
+
+{% block content %}
+
+<h1 class="font-weight-bold text-uppercase text-center title-tag">{{ tag.name }}</h1>
+
+<section>
+
+    <section class="section-post" id='id'>
+        <a href="#tag-user" class="text-center font-weight-bold mx-auto d-block">Cliquez ici pour voir les utilisateurs avec ce tag</a>
+
+        {# Je boucle pour afficher toutes les annonces qui ont ce tag #}
+        {% for post in tag.posts %}
+
+            {# Si le type des posts est annonce ET si son status est UNBLOCKED, alors tu les affiches. #}
+            {% if post.type == "Annonce" and post.status.code == "UNBLOCKED" %}
+
+               <article class="animated slideInUp adCard">
+
+                    <div class="d-flex justify-content-start adTags">
+                        {% for tag in post.tags %}
+                            <a href="{{ path('tag_show', {'slug': tag.slug }) }}" class="badge badge-pill badge-light amber lighten-2 mr-1">{{ tag.name }}</a>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-flex p-4 align-items-center">
+
+                        <div class="imgWrapper mr-4">
+                            <img src="{{ asset(picture_upload_path ~ (post.picture1 ?: 'marvel.jpg')) }}" onclick="onClick(this)"><h2 class="title-card">{{post.title}}</h2>
+                        </div>
+                        <div>
+                            <div>
+                                <p>{{ post.description|striptags|truncate(300, true)|raw }}</p>
+                            </div>
+                            <div class="date_post">
+
+                                <span class="font-italic text-muted" style="font-size: .8em;">
+                                    Publié le
+                                    {{ post.createdAt | date('d/m/Y à H:i') }}
+                                    par
+                                    <a class="text-dark font-weight-bold" href="{{path('user_show', {'slug': post.user.slug }) }}">{{ post.user }}</a>
+                                </span>
+                            </div>
+                            <div style="text-align: end;">
+                                <a href="{{ path('ad_post_show', {'slug': post.slug }) }}" class="btn btn-sm btn-light">
+                                    Lire la suite
+                                </a>
+                                {# Pour les paramètres de onclick, si le status du post est == a BLOCKED alors le param = UNBLOCKED #}
+                                {% if is_granted('ROLE_USER_ADMIN') %}
+                                    <button
+                                        type="button" class="btn btn-sm btn-warning" onclick="handleStatusButton(this,{{post.slug}},{{post.status.code == 'BLOCKED' ? " 'UNBLOCKED' " : " 'BLOCKED' "}})">
+                                        {# Si le code du status du post est == a BLOCKED alors on ecrit Débloquer dans le bouton #}
+                                        <i class="fas fa-minus-circle"></i>
+                                        {{post.status.code == "BLOCKED" ? "Débloquer" : "Bloquer"}}
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            {% endif %}
+
+        {% endfor %}
+    </section>
+
+    
+
+        <h2 class="text-center font-weight-bold">Liste des utilisateurs avec ce tag</span></h2>
+<section class="d-flex flex-wrap justify-content-center" id="tag-user">
+        {# Je boucle pour afficher tous les users qui ont ce tag #}
+        {% for user in tag.users %}
+
+                {# Si le status de l'utilisateur est UNBLOCKED, alors tu les affiches. #}
+                {% if user.status.code == "UNBLOCKED" %}
+
+                    <article class="pt-3 pb-1 tri-right user-card">
+
+                        <div class="d-flex flex-row">
+
+                                <div class="mask-2 mr-3">
+                                    <img src="{{ asset(picture_upload_path ~ (user.avatar ?: 'marvel.jpg')) }}" class="profil-avatar-2 rounded-circle">
+                                </div>
+
+                                <div class="d-flex flex-column">
+                                    <h5 class="font-weight-bold mr-3">
+                                        {{ user.username }}
+
+                                    </h5>
+                                    <p>
+                                        {% for job in user.jobs %}
+                                            {{ job.name }}
+                                        {% endfor %}</p>
+                                        <div class="d-flex justify-content-start mt-3">
+                            {% for tag in user.tags %}
+                                <a href="{{ path('tag_show', {'slug': tag.slug }) }}" class="badge badge-pill badge-info mb-2 mr-1">
+                                    {{ tag.name }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                                </div>
+
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <a href="{{ path('user_show', {'slug': user.slug }) }}" class="btn btn-elegant">Voir le profil</a>
+                        </div>
+
+                    </article>
+                    
+                {% endif %}
+
+        {% endfor %}
+
+    </section>
+
+</section>
+
+<a class="text-dark mt-3 text-center" href="{{ path('ad_post')}}">Revenir à la liste des annonces</a>
+<a class="text-dark mt-3 text-center" href="#top">Remonter en haut de la page</a>
+
+
+{% endblock %}

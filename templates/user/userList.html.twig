@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+<style>
+    .content {
+        margin: 1em auto;
+        width: 55%;
+
+    }
+</style>
+
+<h1 class="font-weight-bold text-center">La communauté</h1>
+<img class='img-stan mx-auto' src="{{asset('images/stangoku.png')}}" alt="logo du site">
+
+
+<section class="d-flex flex-wrap justify-content-center">
+
+    {% for user in users %}
+        {# Si le status de l'utilisateur est UNBLOCKED, alors tu les affiches. #}
+        {% if user.status.code == "UNBLOCKED" %}
+            <article class="pt-3 pb-1 tri-right user-card">
+                <div class="d-flex flex-row">
+
+                    <div class="mask-2 mr-3">
+                        <img src="{{ asset(picture_upload_path ~ (user.avatar ?: 'marvel.jpg')) }}" class="profil-avatar-2 rounded-circle">
+                    </div>
+
+                    <div class="d-flex flex-column">
+
+                        <h5 class="font-weight-bold mr-3">
+                            {{ user.username }}
+                        </h5>
+
+                        <p>
+                            {% for job in user.jobs %}
+                                {{ job.name }}
+                            {% endfor %}
+                        </p>
+                    </div>
+                </div>
+
+                <div>
+
+                    <div class="d-flex justify-content-start mt-3">
+                        {% for tag in user.tags %}
+                            <a href="{{ path('tag_show', {'slug': tag.slug }) }}" class="badge badge-pill badge-light amber lighten-2 mb-2 mr-1">
+                                {{ tag.name }}
+                            </a>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <a href="{{ path('user_show', {'slug': user.slug }) }}" class="btn btn-elegant btn-sm">Voir le profil</a>
+                    </div>
+                </div>
+
+            </article>
+
+        {% endif %}
+
+    {% endfor %}
+</section>
+
+<a class="text-dark mt-3 text-center" href="{{ path('ad_post')}}">Revenir à la liste des annonces</a>
+
+{% endblock %}
+
+{% block search %}
+    <section class="sidebar-search col-2">
+        <div>
+            <div class="d-flex justify-content-center">
+                <a href="{{ path('ad_post_new') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Ajouter une annonce
+                </a>
+            </div>
+
+            <h5 class="font-weight-bold text-center">Rechercher un membre de la communauté par métiers et par tags</h5>
+
+            {{ render(controller(
+            'App\\Controller\\UserController::userSearchForm'
+        )) }}
+            <a href="{{path('user_list')}}">Voir tous les utilisateurs</a>
+        </div>
+    </section>
+{% endblock %}

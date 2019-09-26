@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier l'utilisateur "{{ user.username }}"
+{% endblock %}
+
+{% block body %}
+
+    <div class="content userEditContainer">
+        <h1 class="font-weight-bold">Modifier l'utilisateur "{{ user.username }}"</h1>
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-info">{{ button_label|default('Enregistrer') }}</button>
+        {{ form_end(form) }}
+
+        <div class="my-2">
+            <a href="{{ path('user_show', {'slug': app.user.slug }) }}">Retour à mon profil</a>
+        </div>
+    </div>
+
+
+{% endblock %}

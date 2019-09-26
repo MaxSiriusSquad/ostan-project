@@ -1,0 +1,164 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ user.username }}
+{% endblock %}
+
+
+{% block content %}
+    <style>
+        .content {
+            width: 100%;
+
+        }
+    </style>
+
+
+    <div class="profil-card">
+        <div class="mask">
+            <div>
+                <a href="{{ path('user_show', { 'slug': user.slug }) }}">
+                    <img src="{{ asset(picture_upload_path ~ (user.avatar ?: 'marvel.jpg')) }}" class="profil-avatar border border-dark">
+                </a>
+            </div>
+            {% if app.user %}
+                {% if user.slug != app.user.slug %}
+                    <a class="btn btn-primary btn-msg animated rubberBand " href="{{path ('newmessage') }} ">
+                        <i class="far fa-envelope"></i>
+                    </a>
+                {% endif %}
+            {% endif %}
+
+        </div>
+
+        <div>
+            <div class="profil-info">
+                <div class="pt-5">
+                    <h1 class="profil-username">{{ user.username }}</h1>
+                    <p>{{ user.email }}</p>
+                    {# Affichage du ou des job(s) de l'utilisateur #}
+                    {% for job in user.jobs %}
+                        <div class="badge badge-pill badge-default">
+                            {{ job.name }}
+                        </div>
+                    {% endfor %}
+                    <div class="blockquote-footer">
+                        <p>Membre depuis le
+                            {{ user.createdAt | date('d/m/Y à H:i') }}</p>
+                    </div>
+                </div>
+
+
+                <div class="profil-presentation">
+                    <h4 class="profil-username mt-3 ">Présentation :</h4>
+
+                    <p class="mx-5">{{ user.description }}</p>
+                    {% for tag in user.tags %}
+                        <a href="{{ path('tag_show', {'slug': tag.slug }) }}" class="badge badge-pill badge-primary mb-2">
+                            {{ tag.name }}
+                        </a>
+                    {% endfor %}
+                </div>
+
+
+                {% if app.user %}
+                    {% if user.slug == app.user.slug %}
+                        <div class="d-flex align-items-center justify-content-center">
+                            <div>
+                                <a href="{{ path('user_edit', {'slug': app.user.slug }) }}" class="btn btn-success">
+                                    Modifier mon profil
+                                </a>
+                            </div>
+
+                            <form method="post" action="{{ path('user_delete', {'slug': app.user.slug}) }}" onsubmit="return confirm('Etes vous sûr de vouloir supprimer votre compte ?');">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ app.user.slug) }}">
+                                <button class="btn btn-danger">Supprimer mon profil</button>
+                            </form>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <section class="section-gallery">
+
+        <h5 class="card-title font-weight-bold mb-0 text-center">Galerie</h5>
+
+        <div class="card-gallery">
+            {% for gallery in user.galleryPosts %}
+                <div class="card-body">
+                    <p class="card-text">{{gallery.title}}</p>
+                    <div class='gallery-img'>
+                        <div
+                            class="containerGallery">
+                            {# <a href="{{ path('user_show', { 'id': user.id }) }}"> #}
+                            <img
+                            src="{{ asset(picture_upload_path ~ (gallery.picture1 ?: 'marvel.jpg')) }}" class="img-fluid image-galerie modal-hover-opacity" style="max-width:100%;cursor:pointer" onclick="onClick(this)">
+                        {# </a> #}
+                        </div>
+                        <div
+                            class="containerGallery">
+                            {# <a href="{{ path('user_show', { 'id': user.id }) }}"> #}
+                            <img
+                            src="{{ asset(picture_upload_path ~ (gallery.picture2 ?: 'marvel.jpg')) }}" class="img-fluid image-galerie modal-hover-opacity" style="max-width:100%;cursor:pointer" onclick="onClick(this)">
+                        {# </a> #}
+                        </div>
+                        <div
+                            class="containerGallery">
+                            {# <a href="{{ path('user_show', { 'id': user.id }) }}"> #}
+                            <img
+                            src="{{ asset(picture_upload_path ~ (gallery.picture3 ?: 'marvel.jpg')) }}" class="img-fluid image-galerie modal-hover-opacity" style="max-width:100%;cursor:pointer" onclick="onClick(this)">
+                        {# </a> #}
+                        </div>
+                    </div>
+                </div>
+                <div id="modal01" class="modal" onclick="this.style.display='none'">
+                    <span class="close">&times;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <div class="modal-cont">
+                        <img id="img01" style="max-width:100%">
+                    </div>
+                </div>
+                <p class="card-text">{{gallery.description}}</p>
+                <p class="card-text font-italic text-muted">Posté par
+                    {{gallery.user}}
+                    le
+                    {{ gallery.createdAt | date('d/m/Y à H:i') }}</p>
+                <hr>
+            {% else %}
+                <p>Il n'y a pas de galeries pour le moment....</p>
+            {% endfor %}
+        </div>
+
+        {% if app.user %}
+            {% if user.slug == app.user.slug %}
+                <div class="gallery-form">
+                    {{ form_start(formGallery) }}
+                    {{ form_row(formGallery.title) }}
+                    {{ form_row(formGallery.picture1) }}
+                    {{ form_row(formGallery.picture2) }}
+                    {{ form_row(formGallery.picture3) }}
+                    {{ form_row(formGallery.description) }}
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary">Envoyer</button>
+                    </div>
+                    {{ form_end(formGallery) }}
+                </div>
+            {% endif %}
+        {% endif %}
+
+        <a class="text-dark mt-5 text-center" href="{{ path('advice_post')}}">Revenir à l'accueil</a>
+
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function onClick(element) {
+            document.getElementById("img01").src = element.src;
+            document.getElementById("modal01").style.display = "block";
+        }
+    </script>
+{% endblock %}

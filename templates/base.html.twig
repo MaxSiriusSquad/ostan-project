@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>
+            {% block title %}Welcome!
+            {% endblock %}
+        </title>
+        <link
+        rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+        <!-- Font Awesome -->
+        <link
+        rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+        <!-- Bootstrap core CSS -->
+        <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Material Design Bootstrap -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.9/css/mdb.min.css" rel="stylesheet">
+
+        <link rel="stylesheet" href="{{asset('css/style.css')}}">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Bangers&display=swap" rel="stylesheet">
+
+
+    </head>
+    <body>
+        {% block header %}
+        <nav class="navbar navbar-expand-lg navbar-dark navbar_home">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link-jumbotron" href="{{path('advice_post')}}">Accueil</a>
+                        </li>
+                        <li class="nav-item">                
+                            <a class="nav-link-jumbotron" href="{{path('concept')}}">Le concept</a>
+                        </li>
+                        {# Si je suis authentifié #}
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <li class="nav-item">
+                                <a class="nav-link-jumbotron" href="{{path('ad_post')}}">Annonces</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-jumbotron" href="{{path('user_list')}}">La communauté</a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link-jumbotron" href="{{path('contact')}}">Nous contacter</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="jumbotron">
+
+                <a href="{{path('advice_post')}}">
+                    <img class='logo' src="{{asset('images/logo.svg')}}" alt="logo du site">
+                </a>
+                <h2 class="title_home">Bienvenue sur O'Stan !</h2>
+            <p class="presentation">Le site de rencontre entre éditeurs, illustrateurs et auteurs passionnés qui souhaitent collaborer ensemble autour d'un nouveau projet ! </p>
+                <div
+                    class='nav-connexion'>
+                    {# Si je suis authentifié #}
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        {% if is_granted('ROLE_USER_ADMIN') %}
+                            <a class="nav-link" href="{{path('backend_adList')}}">Admin</a>
+                        {% endif %}
+                        <a class="nav-link" href="{{path('message') }}">Messagerie</a>
+                        <a class="nav-link" href="{{path('user_show', {'slug': app.user.slug }) }}">Mon profil</a>
+                        <a class="nav-link nav-link-logout" href="{{path('app_logout')}}">Déconnexion</a>
+                    {% else %}
+                        <a class="nav-link" href="{{path('app_login')}}">Connexion</a>
+                        <a class="nav-link" href="{{path('app_register')}}">Inscription</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            
+        {% endblock %}
+
+        {% block body %}
+            <div class="body">
+                {% block sidebar %}
+                    <div class="d-none d-lg-block sidebar">
+
+                        <div class="d-flex align-items-center justify-content-center">
+                            <button type="button" class="btn btn-link btn-social"><i class="fab fa-twitter"></i></button>
+                            <button type="button" class="btn btn-link btn-social"><i class="fab fa-facebook"></i></button>
+                            <button type="button" class="btn btn-link btn-social"><i class="fab fa-instagram"></i></button>
+                        </div>
+
+                        <div>
+                            <h4 class="title-sidebar">Les dernières annonces</h4>
+                            {{render(controller(
+                                'App\\Controller\\PostController::adPostsNavList'
+                            ))}}
+                        </div>
+
+                        <div>
+                            <h4 class="title-sidebar">Ils nous ont rejoints !</h4>
+
+                            {{render(controller(
+                                'App\\Controller\\UserController::usersNavList'
+                            ))}}
+                        </div>
+
+                    </div>
+                    <div class='content'>
+                    {% endblock %}
+
+
+                    {% block content %}{% endblock %}
+                    </div>
+
+                {% block search %}{% endblock %}
+            </div>
+        {% endblock %}
+
+        {% block footer %}
+            <footer>
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                    <div class="navbar-collapse justify-content-center" id="navbarSupportedContent">
+                        <ul class="navbar-nav">
+                            <li class="nav-item mr-5">
+                                <a class="nav-link_backend" href="{{path('plan_du_site')}}">Plan du site</a>
+                            </li>
+                            <li class="nav-item mr-5">
+                                <a class="nav-link_backend" href="{{path('mentions_legales')}}">Mentions légales</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link_backend" href="{{path('contact')}}">Nous contacter</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </footer>
+
+            <!-- JQuery -->
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+            <!-- Bootstrap tooltips -->
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+            <!-- Bootstrap core JavaScript -->
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+            <!-- MDB core JavaScript -->
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.9/js/mdb.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+            
+        {% endblock %}
+
+        {% block javascripts %}{% endblock %}
+    </body>
+</html></head></html>
